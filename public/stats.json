@@ -1,0 +1,42 @@
+[
+  {
+    "id": 0,
+    "name": "Louisville",
+    "score": "24",
+    "firstDowns": 19,
+    "thirdDownEfficiency": "7-17",
+    "fourthDownEfficiency": "1-5",
+    "totalYards": 395,
+    "passingYards": 264,
+    "compAtt": "24-41",
+    "yardsPerPass": 6.4,
+    "interceptionsThrown": 1,
+    "rushingYards": 131,
+    "rushingAttempts": 35,
+    "yardsPerRush": 3.7,
+    "penalties": "6-50",
+    "turnovers": 3,
+    "fumblesLost": 2,
+    "possession": "32:04"
+  },
+  {
+    "id": 1,
+    "name": "Notre Dame",
+    "score": "31",
+    "firstDowns": 11,
+    "thirdDownEfficiency": "2-10",
+    "fourthDownEfficiency": "2-3",
+    "totalYards": 280,
+    "passingYards": 163,
+    "compAtt": "17-23",
+    "yardsPerPass": 7.1,
+    "interceptionsThrown": 0,
+    "rushingYards": 117,
+    "rushingAttempts": 31,
+    "yardsPerRush": 3.8,
+    "penalties": "5-45",
+    "turnovers": 2,
+    "fumblesLost": 2,
+    "possession": "27:56"
+  }
+]
