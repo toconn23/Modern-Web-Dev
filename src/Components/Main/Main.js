@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { getAllStats } from "../../Services/Stats.js";
+import { getGameStats } from "../../Services/Stats.js";
+import { getAllGames } from "../../Services/Game.js";
 import MainEmailForm from "./MainEmailForm.js";
 import MainList from "./MainList.js";
 import MainDisplaySelect from "./MainDisplaySelect.js";
@@ -8,6 +9,8 @@ import MainGoIrish from "./MainGoIrish.js";
 const Main = () => {
   // state used to fetch data
   const [stats, setStats] = useState([]);
+  const [games, setGames] = useState([]);
+  const [selectedGameId, setSelectedGameId] = useState("");
   // state to determine whether a stat should be displayed
   const [display, selectDisplay] = useState({
     firstDowns: true,
@@ -26,16 +29,48 @@ const Main = () => {
 
   useEffect(() => {
     //fetch the data and update the state
-    getAllStats()
-      .then((stats) => {
-        setStats(stats);
-        console.log(stats);
+    getAllGames()
+      .then((games) => {
+        setGames(games);
       })
       .catch((err) => console.log("Error fetching data:", err));
   }, []);
 
+  const selectGame = (e) => {
+    e.preventDefault();
+    if (selectedGameId) {
+      getGameStats(selectedGameId)
+        .then((stats) => {
+          setStats(stats);
+          console.log("Stats fetched for selected game:", stats);
+        })
+        .catch((err) => console.log("Error fetching stats:", err));
+    } else {
+      console.log("Please select a game.");
+    }
+  };
+
   return (
     <div>
+      <div>
+        <h3>Select a Game to Get More Stats:</h3>
+        <form onSubmit={selectGame}>
+          <select
+            value={selectedGameId}
+            onChange={(e) => setSelectedGameId(e.target.value)}
+          >
+            <option value="" disabled>
+              Select a game
+            </option>
+            {games.map((game) => (
+              <option key={game._id} value={game._id}>
+                {game.name}
+              </option>
+            ))}
+          </select>
+          <button type="submit">Get Stats</button>
+        </form>
+      </div>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <h1>Notre Dame vs Lousiville Breakdown</h1>
       </div>
