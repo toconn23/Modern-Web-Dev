@@ -25,7 +25,7 @@ const MainDisplaySelect = ({ display, selectDisplay }) => {
       <legend>Display Options</legend>
       <ul>
         {fields.map(({ name, label }) => (
-          <li style={{ listStyleType: "none" }}>
+          <li style={{ listStyleType: "none" }} key={name}>
             <label>
               <input
                 type="checkbox"
