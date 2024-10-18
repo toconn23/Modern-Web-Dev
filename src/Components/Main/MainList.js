@@ -1,7 +1,6 @@
 import React from "react";
 
 const MainList = ({ stats, display }) => {
-  // Return the stats based on the display conditions for each team
   return (
     <div
       style={{
