@@ -16,9 +16,10 @@ export const getAllStats = async () => {
 };
 
 // Fetch the name and objectId of each game asynchronously
-export const getGameStats = async ({ gameId }) => {
+export const getGameStats = async (gameId) => {
   const Stats = Parse.Object.extend("Stats");
   const query = new Parse.Query(Stats);
+  query.equalTo("gameId", gameId);
   try {
     const response = await query.find();
     const stats = response.map((item) => item.toJSON());
