@@ -1,5 +1,6 @@
 import Parse from "parse";
 
+// create user
 export const createUser = (newUser) => {
   const user = new Parse.User();
 
@@ -21,6 +22,7 @@ export const createUser = (newUser) => {
     });
 };
 
+//login user
 export const loginUser = (user) => {
   return Parse.User.logIn(user.email, user.password)
     .then((user) => {
@@ -31,6 +33,7 @@ export const loginUser = (user) => {
     });
 };
 
+//check if user is authenticated
 export const checkUser = () => {
   return Parse.User.current()?.authenticated;
 };

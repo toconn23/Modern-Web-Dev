@@ -14,6 +14,7 @@ export default function Auth() {
       navigate("/");
     }
   }, [navigate]);
+  // Auth Page Component
   return (
     <div>
       <Header />

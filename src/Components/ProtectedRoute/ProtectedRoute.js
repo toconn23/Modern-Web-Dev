@@ -9,6 +9,7 @@ const ProtectedRoute = ({ element: Component, ...rest }) => {
   const goBackHandler = () => {
     navigate("/Auth");
   };
+  //check use is logged in
   if (checkUser()) {
     return <Component />;
   } else {
