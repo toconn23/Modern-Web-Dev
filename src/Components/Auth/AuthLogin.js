@@ -19,12 +19,12 @@ const AuthLogin = () => {
     if (user && add) {
       loginUser(user).then((userLoggedIn) => {
         if (userLoggedIn) {
-          nav(-1);
+          nav("/Main");
         }
         setAdd(false);
       });
     }
-  }, [user, add]);
+  }, [user, add, nav]);
 
   const onChangeHandler = (e) => {
     e.preventDefault();
