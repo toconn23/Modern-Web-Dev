@@ -30,3 +30,7 @@ export const loginUser = (user) => {
       alert(`Error: ${error.message}`);
     });
 };
+
+export const checkUser = () => {
+  return Parse.User.current()?.authenticated;
+};
