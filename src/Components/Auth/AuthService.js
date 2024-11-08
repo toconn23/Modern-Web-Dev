@@ -1,5 +1,5 @@
 import Parse from "parse";
-
+// create a new user
 export const createUser = (newUser) => {
   const user = new Parse.User();
 
@@ -20,7 +20,7 @@ export const createUser = (newUser) => {
       alert(`Error: ${error.message}`);
     });
 };
-
+// login a user
 export const loginUser = (user) => {
   return Parse.User.logIn(user.email, user.password)
     .then((user) => {
@@ -30,7 +30,7 @@ export const loginUser = (user) => {
       alert(`Error: ${error.message}`);
     });
 };
-
+// check if user is authenticated
 export const checkUser = () => {
   return Parse.User.current()?.authenticated;
 };

@@ -15,6 +15,7 @@ const AuthRegister = () => {
 
   useEffect(() => {
     if (newUser && add) {
+      //create the user
       createUser(newUser).then((userCreated) => {
         if (userCreated) {
           alert(

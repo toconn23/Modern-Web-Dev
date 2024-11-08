@@ -15,6 +15,7 @@ const AuthLogin = () => {
   // flag is the state to watch for add/remove updates
   const [add, setAdd] = useState(false);
 
+  //check if user is authenticated
   useEffect(() => {
     if (user && add) {
       loginUser(user).then((userLoggedIn) => {
