@@ -48,6 +48,24 @@ const Board = () => {
               {cell === "r" && (
                 <div className="aspect-square w-8/12 bg-red-500 rounded-full"></div>
               )}
+              {cell === "R" && (
+                <div className="aspect-square w-8/12 bg-red-500 rounded-full flex items-center justify-center">
+                  <img
+                    src="/images/king.png"
+                    alt="king"
+                    className="w-3/4 object-contain"
+                  />
+                </div>
+              )}
+              {cell === "B" && (
+                <div className="aspect-square w-8/12 bg-black rounded-full flex items-center justify-center">
+                  <img
+                    src="/images/king.png"
+                    alt="king"
+                    className="w-3/4 object-contain"
+                  />
+                </div>
+              )}
               {validMoves.some((move) => move[0] === i && move[1] === j) && (
                 <div className="aspect-square w-4/12 bg-green-500 rounded-full"></div>
               )}

@@ -50,7 +50,7 @@ export const findJumps = (board, row, col, piece) => {
         if (
           !visited.has(`${nextRow},${nextCol}`) &&
           (board[nextRow]?.[nextCol] === "-" ||
-            (nextRow === row && nextCol === col)) &&
+            (nextRow === row && nextCol === col && path.length > 2)) && //check if can jump back, path.length > 2 to stop king from jumping back after one jump
           board[jumpRow]?.[jumpCol]?.toLowerCase() !== piece.toLowerCase() &&
           board[jumpRow]?.[jumpCol] !== "-"
         ) {
@@ -112,7 +112,13 @@ export const getValidMoves = (board, row, col) => {
     ];
   }
   directions.forEach((direction) => {
-    if (board[row + direction[0]][col + direction[1]] === "-") {
+    if (
+      row + direction[0] >= 0 &&
+      row + direction[0] < board.length &&
+      col + direction[1] >= 0 &&
+      col + direction[1] < board[0].length &&
+      board[row + direction[0]][col + direction[1]] === "-"
+    ) {
       moves.push([row + direction[0], col + direction[1]]);
     }
   });
