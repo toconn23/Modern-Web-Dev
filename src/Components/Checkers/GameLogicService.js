@@ -5,7 +5,7 @@ export const initBoard = () => {
     ["b", "-", "b", "-", "b", "-", "b", "-"],
     ["-", "-", "-", "-", "-", "-", "-", "-"],
     ["-", "-", "-", "-", "-", "-", "-", "-"],
-    ["-", "r", "-", "r", "-", "r", "-", "r"],
+    ["-", "r", "-", "R", "-", "r", "-", "r"],
     ["r", "-", "r", "-", "r", "-", "r", "-"],
     ["-", "r", "-", "r", "-", "r", "-", "r"],
   ];
@@ -52,8 +52,10 @@ export const findJumps = (board, row, col, piece) => {
           (board[nextRow]?.[nextCol] === "-" ||
             (nextRow === row &&
               nextCol === col &&
-              path[path.length - 2]?.[0] !== row &&
-              path[path.length - 2]?.[1] !== col)) && //check if can jump back, path.length > 2 to stop king from jumping back after one jump
+              !(
+                path[path.length - 2]?.[0] === row &&
+                path[path.length - 2]?.[1] === col
+              ))) && //check if can jump back, path.length > 2 to stop king from jumping back after one jump
           board[jumpRow]?.[jumpCol]?.toLowerCase() !== piece.toLowerCase() &&
           board[jumpRow]?.[jumpCol] !== "-"
         ) {
