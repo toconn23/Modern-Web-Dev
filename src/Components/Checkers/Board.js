@@ -28,7 +28,7 @@ const Board = () => {
   // Render the Board, highlighting the selected piece and valid moves
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="grid grid-cols-8 w-4/12">
+      <div className="grid grid-cols-8 w-5/12">
         {board.map((row, i) =>
           row.map((cell, j) => (
             <button

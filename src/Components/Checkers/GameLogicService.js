@@ -13,6 +13,7 @@ export const initBoard = () => {
 
 export const findJumps = (board, row, col, piece) => {
   const jumps = [];
+  //use DFS to find all possible jumps with their paths
   const getJumps = (currentRow, currentCol, piece, path, visited) => {
     let jumpDirections = [];
     if (piece === "b") {
