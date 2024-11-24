@@ -10,6 +10,7 @@ const Board = () => {
   const [turn, setTurn] = useState("r");
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [validMoves, setValidMoves] = useState([]);
+  const [movePaths, setMovePaths] = useState([]);
 
   const handleClick = (i, j) => {
     handleSquareClick(
@@ -22,7 +23,9 @@ const Board = () => {
       validMoves,
       setValidMoves,
       turn,
-      setTurn
+      setTurn,
+      movePaths,
+      setMovePaths
     );
   };
   // Render the Board, highlighting the selected piece and valid moves

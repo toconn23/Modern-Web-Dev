@@ -5,7 +5,7 @@ export const initBoard = () => {
     ["b", "-", "b", "-", "b", "-", "b", "-"],
     ["-", "-", "-", "-", "-", "-", "-", "-"],
     ["-", "-", "-", "-", "-", "-", "-", "-"],
-    ["-", "r", "-", "R", "-", "r", "-", "r"],
+    ["-", "r", "-", "r", "-", "r", "-", "r"],
     ["r", "-", "r", "-", "r", "-", "r", "-"],
     ["-", "r", "-", "r", "-", "r", "-", "r"],
   ];
@@ -13,6 +13,7 @@ export const initBoard = () => {
 
 export const findJumps = (board, row, col, piece) => {
   const jumps = [];
+  let paths = [];
   //use DFS to find all possible jumps with their paths
   const getJumps = (currentRow, currentCol, piece, path, visited) => {
     let jumpDirections = [];
@@ -64,6 +65,7 @@ export const findJumps = (board, row, col, piece) => {
           const newPath = [...path, [nextRow, nextCol]];
           jumps.push([nextRow, nextCol]);
           console.log("path", newPath);
+          paths.push(newPath);
           if (piece === "b" && nextRow === 7) {
             getJumps(nextRow, nextCol, "B", newPath, newVisited);
           } else if (piece === "r" && nextRow === 0) {
@@ -76,31 +78,23 @@ export const findJumps = (board, row, col, piece) => {
   };
   getJumps(row, col, piece, [[row, col]], new Set());
   console.log(jumps);
-  return jumps;
+  return paths;
+  //return jumps;
 };
 
 export const getValidMoves = (board, row, col) => {
   const piece = board[row][col];
   const moves = [];
   let directions = [];
-  let jumpDirections = [];
   if (piece === "b") {
     directions = [
       [1, 1],
       [1, -1],
     ];
-    jumpDirections = [
-      [2, 2],
-      [2, -2],
-    ];
   } else if (piece === "r") {
     directions = [
       [-1, 1],
       [-1, -1],
-    ];
-    jumpDirections = [
-      [-2, 2],
-      [-2, -2],
     ];
   } else {
     directions = [
@@ -108,12 +102,6 @@ export const getValidMoves = (board, row, col) => {
       [1, -1],
       [-1, 1],
       [-1, -1],
-    ];
-    jumpDirections = [
-      [2, 2],
-      [2, -2],
-      [-2, 2],
-      [-2, -2],
     ];
   }
   directions.forEach((direction) => {
@@ -124,11 +112,16 @@ export const getValidMoves = (board, row, col) => {
       col + direction[1] < board[0].length &&
       board[row + direction[0]][col + direction[1]] === "-"
     ) {
-      moves.push([row + direction[0], col + direction[1]]);
+      let path = [];
+      path.push([row, col]);
+      path.push([row + direction[0], col + direction[1]]);
+      moves.push(path);
     }
   });
-  const jumpMoves = findJumps(board, row, col, piece);
-  moves.push(...jumpMoves);
+  const jumpPaths = findJumps(board, row, col, piece);
+  moves.push(...jumpPaths);
+  //const jumpMoves = findJumps(board, row, col, piece);
+  //moves.push(...jumpMoves);
   console.log(moves);
   return moves;
 };
@@ -143,25 +136,64 @@ export const handleSquareClick = (
   validMoves,
   setValidMoves,
   turn,
-  setTurn
+  setTurn,
+  movePaths,
+  setMovePaths
 ) => {
   const newBoard = [...board];
   if (
     selectedPiece &&
     validMoves.some((move) => move[0] === i && move[1] === j)
   ) {
-    newBoard[i][j] = newBoard[selectedPiece.row][selectedPiece.col];
-    newBoard[selectedPiece.row][selectedPiece.col] = "-";
+    //find the path(s) that ends at the selected square
+    const paths = movePaths.filter(
+      (path) => path[path.length - 1][0] === i && path[path.length - 1][1] === j
+    );
+    //find the longest path if multiple possible paths to same square
+    const path = paths.reduce((longest, curren) => {
+      return curren.length > longest.length ? curren : longest;
+    }, []);
+    let isKinged = false;
+    for (let i = 1; i < path.length; i++) {
+      //check if piece is kinged along the way
+      if (
+        (path[i][0] === 0 && turn === "r") ||
+        (path[i][0] === 7 && turn === "b")
+      ) {
+        isKinged = true;
+      }
+      let distance = Math.abs(path[i][0] - path[i - 1][0]);
+      if (distance === 2) {
+        let jumpRow = (path[i][0] + path[i - 1][0]) / 2;
+        let jumpCol = (path[i][1] + path[i - 1][1]) / 2;
+        newBoard[jumpRow][jumpCol] = "-";
+      }
+    }
+
+    if (isKinged) {
+      newBoard[path[path.length - 1][0]][path[path.length - 1][1]] =
+        turn.toUpperCase();
+    } else {
+      newBoard[i][j] = newBoard[selectedPiece.row][selectedPiece.col];
+    }
+    //check if end up in same spot, if not set the original spot to empty
+    if (selectedPiece.row !== i || selectedPiece.col !== j) {
+      newBoard[selectedPiece.row][selectedPiece.col] = "-";
+    }
     setBoard(newBoard);
     setTurn(turn === "r" ? "b" : "r");
     setSelectedPiece(null);
     setValidMoves([]);
+    setMovePaths([]);
   } else if (board[i][j]?.toLowerCase() === turn) {
     setSelectedPiece({ row: i, col: j });
-    setValidMoves(getValidMoves(board, i, j));
+    let moves = getValidMoves(board, i, j);
+    setMovePaths(moves);
+    setValidMoves(moves.map((path) => path[path.length - 1]));
     return;
   } else {
     setValidMoves([]);
+    setMovePaths([]);
     setSelectedPiece(null);
   }
 };
