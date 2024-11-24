@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {
-  handleSquareClick,
-  initBoard,
-  getValidMoves,
-} from "./GameLogicService";
+import { handleSquareClick, initBoard } from "./GameLogicService";
 
 const Board = () => {
   const [board, setBoard] = useState(initBoard());
