@@ -79,7 +79,6 @@ export const findJumps = (board, row, col, piece) => {
   getJumps(row, col, piece, [[row, col]], new Set());
   console.log(jumps);
   return paths;
-  //return jumps;
 };
 
 export const getValidMoves = (board, row, col) => {
@@ -120,8 +119,6 @@ export const getValidMoves = (board, row, col) => {
   });
   const jumpPaths = findJumps(board, row, col, piece);
   moves.push(...jumpPaths);
-  //const jumpMoves = findJumps(board, row, col, piece);
-  //moves.push(...jumpMoves);
   console.log(moves);
   return moves;
 };
@@ -196,4 +193,19 @@ export const handleSquareClick = (
     setMovePaths([]);
     setSelectedPiece(null);
   }
+};
+
+export const checkWin = (board, turn) => {
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[0].length; j++) {
+      //check if there are any valid moves for the current player
+      if (
+        board[i][j]?.toLowerCase() === turn &&
+        getValidMoves(board, i, j).length > 0
+      ) {
+        return false;
+      }
+    }
+  }
+  return true;
 };
