@@ -45,6 +45,7 @@ const Board = () => {
           Black Wins!
         </div>
       )}
+      {/* make grid of buttons for board */}
       <div className="flex justify-center items-center h-screen ">
         <div className="grid grid-cols-8 w-5/12">
           {board.map((row, i) =>
