@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { handleSquareClick, initBoard, checkWin } from "./GameLogicService";
+import { updateGame, liveQuery, getGame } from "./GameStateService";
 
-const Board = () => {
+const Board = ({ id }) => {
   const [board, setBoard] = useState(initBoard());
   const [turn, setTurn] = useState("r");
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [validMoves, setValidMoves] = useState([]);
   const [movePaths, setMovePaths] = useState([]);
   const [winner, setWinner] = useState(null);
+  const [player, setPlayer] = useState();
+  //check if the component is rendered for the first time to avoid updating the board to initial state
+  const [isInitialRender, setIsInitialRender] = useState(true);
+  //avoid render of initial board
+  const [loading, setLoading] = useState(true);
 
   const handleClick = (i, j) => {
     handleSquareClick(
@@ -25,12 +31,29 @@ const Board = () => {
       setMovePaths
     );
   };
+  // run the liveQuery to update the board for both players
+  liveQuery(setBoard, setTurn, setSelectedPiece, setValidMoves);
   useEffect(() => {
-    if (checkWin(board, turn)) {
-      if (turn === "r") setWinner("b");
-      else setWinner("r");
+    getGame(id).then((match) => {
+      setBoard(match.get("board"));
+      setTurn(match.get("turn"));
+      setLoading(false);
+    });
+  }, []);
+  useEffect(() => {
+    if (isInitialRender || loading) {
+      setIsInitialRender(false);
+      return;
+    } else {
+      if (checkWin(board, turn)) {
+        if (turn === "r") setWinner("b");
+        else setWinner("r");
+      }
+      updateGame(id, board, turn);
     }
-  }, [board, turn]);
+  }, [turn]);
+
+  if (loading) return null;
 
   // Render the Board, highlighting the selected piece and valid moves
   return (

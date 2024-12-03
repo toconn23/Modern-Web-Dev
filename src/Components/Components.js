@@ -19,7 +19,7 @@ export default function Components() {
           path="/Main"
           element={<ProtectedRoute path="/" element={Main} />}
         />
-        <Route path="/Game" element={<Game />} />
+        <Route path="/Game/:id" element={<Game />} />
       </Routes>
     </Router>
   );
