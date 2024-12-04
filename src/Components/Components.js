@@ -6,6 +6,7 @@ import AuthLogin from "./Auth/AuthLogin";
 import Game from "./Checkers/Game";
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Dashboard from "./Dashboard/Dashboard";
 
 export default function Components() {
   return (
@@ -19,7 +20,11 @@ export default function Components() {
           path="/Main"
           element={<ProtectedRoute path="/" element={Main} />}
         />
-        <Route path="/Game/:id" element={<Game />} />
+        <Route
+          path="/Dashboard"
+          element={<ProtectedRoute path="/" element={Dashboard} />}
+        />
+        <Route path="/Game" element={<Game />} />
       </Routes>
     </Router>
   );

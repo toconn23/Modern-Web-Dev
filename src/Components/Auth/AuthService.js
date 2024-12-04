@@ -34,3 +34,7 @@ export const loginUser = (user) => {
 export const checkUser = () => {
   return Parse.User.current()?.authenticated;
 };
+
+export const getUserId = () => {
+  return Parse.User.current()?.id;
+};

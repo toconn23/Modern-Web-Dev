@@ -9,7 +9,7 @@ const Board = ({ id }) => {
   const [validMoves, setValidMoves] = useState([]);
   const [movePaths, setMovePaths] = useState([]);
   const [winner, setWinner] = useState(null);
-  const [player, setPlayer] = useState();
+  //const [player, setPlayer] = useState();
   //check if the component is rendered for the first time to avoid updating the board to initial state
   const [isInitialRender, setIsInitialRender] = useState(true);
   //avoid render of initial board
