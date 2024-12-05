@@ -21,9 +21,9 @@ const Dashboard = () => {
     let red = null;
     if (selectedColor === "r") {
       black = await getUserByUsername(email);
-      red = Parse.User.current();
+      red = await getUserByUsername(Parse.User.current().get("username"));
     } else {
-      black = Parse.User.current();
+      black = await getUserByUsername(Parse.User.current().get("username"));
       red = await getUserByUsername(email);
     }
     if (!black || !red) {

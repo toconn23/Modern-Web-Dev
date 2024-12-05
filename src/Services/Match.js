@@ -25,7 +25,7 @@ export const createMatch = async (black, red) => {
 };
 
 export const getUserByUsername = async (username) => {
-  const query = new Parse.Query(Parse.User);
+  const query = new Parse.Query("Leaderboard");
   try {
     console.log("Username: ", username);
     query.equalTo("username", username);

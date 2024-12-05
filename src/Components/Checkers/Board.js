@@ -36,17 +36,50 @@ const Board = ({ id }) => {
   // run the liveQuery to update the board for both players
   liveQuery(setBoard, setTurn, setSelectedPiece, setValidMoves);
   useEffect(() => {
+    console.log("call");
+    if (!loading) return;
+    //retrieve the game from the database
     getGame(id).then((match) => {
       if (!match || match.length === 0) {
         alert("Match not found!");
         navigate(-1);
         return;
       }
-      setBoard(match.get("board"));
-      setTurn(match.get("turn"));
-      setLoading(false);
+
+      const blackPointer = match.get("black");
+      const redPointer = match.get("red");
+      console.log("blackPointer", blackPointer);
+      console.log("redPointer", redPointer);
+      Promise.all([blackPointer.fetch(), redPointer.fetch()])
+        .then(([blackUser, redUser]) => {
+          console.log(blackUser);
+          console.log(blackUser.get("username"));
+          if (
+            blackUser.get("username") === Parse.User.current()?.get("username")
+          ) {
+            setPlayer("b");
+          } else if (
+            redUser.get("username") === Parse.User.current()?.get("username")
+          ) {
+            setPlayer("r");
+          } else {
+            alert("You are not a player in this match!");
+            navigate(-1);
+            return; // Prevent further execution
+          }
+          console.log("2");
+          // Update state only if everything is successful
+          setBoard(match.get("board"));
+          setTurn(match.get("turn"));
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching users:", error);
+          alert(error.message);
+          navigate(-1);
+        });
     });
-  }, [id, navigate]);
+  }, [player, id, navigate, loading]);
   useEffect(() => {
     if (isInitialRender || loading) {
       setIsInitialRender(false);
