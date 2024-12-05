@@ -2,7 +2,6 @@ import Parse from "parse";
 import React, { useEffect, useState } from "react";
 import Header from "../Common/Header.js";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import Board from "../Game/Board.js";
 import {
   getMatches,

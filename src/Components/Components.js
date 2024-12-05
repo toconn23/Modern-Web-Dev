@@ -1,6 +1,6 @@
 import Home from "./Home/Home";
 import Main from "./Main/Main";
-import Auth from "./Auth/Auth";
+// import Auth from "./Auth/Auth";
 import AuthRegister from "./Auth/AuthRegister";
 import AuthLogin from "./Auth/AuthLogin";
 import Game from "./Game/Game";
