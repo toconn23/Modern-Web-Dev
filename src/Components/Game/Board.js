@@ -36,7 +36,6 @@ const Board = ({ id, minimized = false }) => {
   // run the liveQuery to update the board for both players
   liveQuery(setBoard, setTurn, setSelectedPiece, setValidMoves);
   useEffect(() => {
-    console.log("call");
     if (!loading) return;
     //retrieve the game from the database
     getGame(id).then((match) => {
@@ -48,12 +47,8 @@ const Board = ({ id, minimized = false }) => {
 
       const blackPointer = match.get("black");
       const redPointer = match.get("red");
-      console.log("blackPointer", blackPointer);
-      console.log("redPointer", redPointer);
       Promise.all([blackPointer.fetch(), redPointer.fetch()])
         .then(([blackUser, redUser]) => {
-          console.log(blackUser);
-          console.log(blackUser.get("username"));
           if (
             blackUser.get("username") === Parse.User.current()?.get("username")
           ) {
@@ -67,7 +62,6 @@ const Board = ({ id, minimized = false }) => {
             navigate(-1);
             return; // Prevent further execution
           }
-          console.log("2");
           // Update state only if everything is successful
           setBoard(match.get("board"));
           setTurn(match.get("turn"));
