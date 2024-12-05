@@ -110,7 +110,7 @@ const Dashboard = () => {
             return (
               <div key={match.id} className="flex flex-col items-center">
                 <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-5 flex items-center justify-center flex-col"
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded m-5 flex items-center justify-center flex-col"
                   onClick={() => {
                     nav(`/game/${match.id}`);
                   }}
