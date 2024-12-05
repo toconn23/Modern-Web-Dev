@@ -38,6 +38,11 @@ export const loginUser = (user) => {
       alert(`Error: ${error.message}`);
     });
 };
+export const logoutUser = () => {
+  return Parse.User.logOut().then(() => {
+    return true;
+  });
+};
 // check if user is authenticated
 export const checkUser = () => {
   return Parse.User.current()?.authenticated;
