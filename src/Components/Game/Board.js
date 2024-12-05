@@ -109,8 +109,8 @@ const Board = ({ id }) => {
         </div>
       )}
       {/* make grid of buttons for board */}
-      <div className="flex justify-center items-center h-screen ">
-        <div className="grid grid-cols-8 w-5/12">
+      <div className="flex justify-center items-center h-screen">
+        <div className="absolute top-[155px] grid grid-cols-8 w-10/12 sm:w-10/12 md:w-9/12 lg:w-5/12 ">
           {/* reverse the board if player is black */}
           {(player === "b"
             ? board.map((row) => [...row].reverse()).reverse()
