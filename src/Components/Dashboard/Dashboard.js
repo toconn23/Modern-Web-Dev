@@ -1,5 +1,5 @@
 import Parse from "parse";
-import React, { useMemo, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../Common/Header.js";
 import { useNavigate } from "react-router-dom";
 import Board from "../Game/Board.js";
@@ -15,6 +15,7 @@ const Dashboard = () => {
   const [email, setEmail] = useState("");
   const [selectedColor, setSelectedColor] = useState("r");
   const [matches, setMatches] = useState([]);
+  const [users, setUsers] = useState([]);
   const nav = useNavigate();
 
   useEffect(() => {
@@ -22,13 +23,28 @@ const Dashboard = () => {
     const fetchMatches = async () => {
       const username = Parse.User.current()?.get("username");
       try {
-        setMatches(await getMatches(username));
+        const matches = await getMatches(username);
+        setMatches(matches);
+        //For some reason, username of opponent will return null unless i do this chicanery
+        matches?.forEach((match) => {
+          match
+            .get("black")
+            .fetch()
+            .then((b) => setUsers(...users, b.get("username")));
+        });
+        matches?.forEach((match) => {
+          match
+            .get("red")
+            .fetch()
+            .then((r) => setUsers(...users, r.get("username")));
+        });
       } catch (error) {
         console.error("Error fetching matches:", error);
       }
     };
 
     fetchMatches();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleButtonClick = () => {
@@ -88,13 +104,13 @@ const Dashboard = () => {
         />
       )}
       <div>
-        <h2 className="text-2xl font-bold">Your Games</h2>
-        <div className="grid grid-cols-4">
+        <h2 className="text-2xl font-bold">Your Games:</h2>
+        <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
           {matches?.map((match) => {
             return (
               <div key={match.id} className="flex flex-col items-center">
                 <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-5 flex items-center justify-center flex-col"
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold pt-2 pb-4 px-4 rounded m-5 flex items-center justify-center flex-col"
                   onClick={() => {
                     nav(`/game/${match.id}`);
                   }}

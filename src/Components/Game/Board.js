@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Parse from "parse";
 import { useNavigate } from "react-router-dom";
-import { handleSquareClick, initBoard, checkWin } from "./GameLogicService";
-import { updateGame, liveQuery, getGame } from "./GameStateService";
+import {
+  handleSquareClick,
+  initBoard,
+  checkWin,
+} from "./GameServices/GameLogicService";
+import {
+  updateGame,
+  liveQuery,
+  getGame,
+} from "./GameServices/GameStateService";
 
 const Board = ({ id, minimized = false }) => {
   const [board, setBoard] = useState(initBoard());

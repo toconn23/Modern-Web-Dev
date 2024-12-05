@@ -1,5 +1,5 @@
 import Parse from "parse";
-import * as ENV from "../../environment.js";
+import * as ENV from "../../../environment.js";
 
 export async function liveQuery(
   setBoard,
