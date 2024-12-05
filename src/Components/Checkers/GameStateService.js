@@ -25,7 +25,6 @@ export async function liveQuery(
       //reset the selected piece and valid moves to prevent moving twice
       setSelectedPiece(null);
       setValidMoves([]);
-      console.log("object updated");
     });
     subscription.on("create", (object) => {
       setBoard(object.get("board"));

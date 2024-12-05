@@ -64,7 +64,6 @@ export const findJumps = (board, row, col, piece) => {
           newVisited.add(`${nextRow},${nextCol}`); // Add the new entry
           const newPath = [...path, [nextRow, nextCol]];
           jumps.push([nextRow, nextCol]);
-          console.log("path", newPath);
           paths.push(newPath);
           if (piece === "b" && nextRow === 7) {
             getJumps(nextRow, nextCol, "B", newPath, newVisited);
@@ -77,7 +76,6 @@ export const findJumps = (board, row, col, piece) => {
     }
   };
   getJumps(row, col, piece, [[row, col]], new Set());
-  console.log(jumps);
   return paths;
 };
 
@@ -119,7 +117,6 @@ export const getValidMoves = (board, row, col) => {
   });
   const jumpPaths = findJumps(board, row, col, piece);
   moves.push(...jumpPaths);
-  console.log(moves);
   return moves;
 };
 

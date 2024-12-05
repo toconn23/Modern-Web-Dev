@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import Parse from "parse";
 import { useNavigate } from "react-router-dom";
 import { handleSquareClick, initBoard, checkWin } from "./GameLogicService";
 import { updateGame, liveQuery, getGame } from "./GameStateService";
@@ -10,10 +11,9 @@ const Board = ({ id }) => {
   const [validMoves, setValidMoves] = useState([]);
   const [movePaths, setMovePaths] = useState([]);
   const [winner, setWinner] = useState(null);
-  const [player, setPlayer] = useState("r");
-  //check if the component is rendered for the first time to avoid updating the board to initial state
+  const [player, setPlayer] = useState(Parse.User.current() ? "r" : "b");
   const [isInitialRender, setIsInitialRender] = useState(true);
-  //avoid render of initial board
+  //check if the component is rendered for the first time to avoid updating the board to initial state
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -84,11 +84,16 @@ const Board = ({ id }) => {
             : board
           ).map((row, i) =>
             row.map((cell, j) => {
+              //get the actual row and column of the game array based on the player color
               let actualI = player === "b" ? 7 - i : i;
               let actualJ = player === "b" ? 7 - j : j;
               return (
                 <button
-                  onClick={() => handleClick(actualI, actualJ)}
+                  onClick={() => {
+                    if (turn === player) {
+                      handleClick(actualI, actualJ);
+                    }
+                  }}
                   key={`${i}-${j}`}
                   className={`aspect-square flex items-center justify-center  
                 ${
