@@ -19,6 +19,7 @@ export const createMatch = async (black, red) => {
   try {
     const result = await match.save();
     console.log("Match created with id: ", result.id);
+    return result;
   } catch (err) {
     console.log("Error: ", err);
   }

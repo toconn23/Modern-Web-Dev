@@ -1,5 +1,5 @@
 import Parse from "parse";
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import Header from "../Common/Header.js";
 import { useNavigate } from "react-router-dom";
 import Board from "../Game/Board.js";
@@ -15,28 +15,20 @@ const Dashboard = () => {
   const [email, setEmail] = useState("");
   const [selectedColor, setSelectedColor] = useState("r");
   const [matches, setMatches] = useState([]);
-  const [red, setRed] = useState([]);
-  const [black, setBlack] = useState([]);
   const nav = useNavigate();
 
   useEffect(() => {
-    getMatches(Parse.User.current()?.get("username")).then((matches) => {
-      setMatches(matches);
-      // need to fetch the username from the red and black pointers to display
-      matches?.forEach((match) => {
-        match
-          .get("black")
-          .fetch()
-          .then((b) => setBlack(...black, b.get("username")));
-      });
-      matches?.forEach((match) => {
-        match
-          .get("red")
-          .fetch()
-          .then((r) => setRed(...red, r.get("username")));
-      });
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    //get the matches for the current user
+    const fetchMatches = async () => {
+      const username = Parse.User.current()?.get("username");
+      try {
+        setMatches(await getMatches(username));
+      } catch (error) {
+        console.error("Error fetching matches:", error);
+      }
+    };
+
+    fetchMatches();
   }, []);
 
   const handleButtonClick = () => {
@@ -49,11 +41,16 @@ const Dashboard = () => {
     // set local user to selected color and opponent to opposite color
     let black = null;
     let red = null;
+    //check if idiot is trying to play against themselves
+    if (email === Parse.User.current()?.get("username")) {
+      alert("You cannot play against yourself dumbass");
+      return;
+    }
     if (selectedColor === "r") {
       black = await getUserByUsername(email);
-      red = await getUserByUsername(Parse.User.current().get("username"));
+      red = await getUserByUsername(Parse.User.current()?.get("username"));
     } else {
-      black = await getUserByUsername(Parse.User.current().get("username"));
+      black = await getUserByUsername(Parse.User.current()?.get("username"));
       red = await getUserByUsername(email);
     }
     if (!black || !red) {
@@ -62,7 +59,9 @@ const Dashboard = () => {
     }
     // reset email after submitting
     setEmail("");
-    await createMatch(black, red);
+    //update the matches with newly submitted match
+    const newMatch = await createMatch(black, red);
+    setMatches((prevMatches) => [...prevMatches, newMatch]);
     //hide form after submitting
     setShowForm(false);
   };
@@ -90,12 +89,12 @@ const Dashboard = () => {
       )}
       <div>
         <h2 className="text-2xl font-bold">Your Games</h2>
-        <ul className="flex space-x-4">
+        <div className="grid grid-cols-4">
           {matches?.map((match) => {
             return (
-              <li key={match.id}>
+              <div key={match.id} className="flex flex-col items-center">
                 <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-5 flex items-center justify-center flex-col "
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-5 flex items-center justify-center flex-col"
                   onClick={() => {
                     nav(`/game/${match.id}`);
                   }}
@@ -106,10 +105,10 @@ const Dashboard = () => {
                     <Board id={match.id} minimized={true} />
                   </div>
                 </button>
-              </li>
+              </div>
             );
           })}
-        </ul>
+        </div>
       </div>
     </div>
   );
