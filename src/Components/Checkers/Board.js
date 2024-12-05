@@ -56,7 +56,7 @@ const Board = ({ id }) => {
         if (turn === "r") setWinner("b");
         else setWinner("r");
       }
-      updateGame(id, board, turn);
+      updateGame(id, board, turn, winner);
     }
   }, [turn]);
 

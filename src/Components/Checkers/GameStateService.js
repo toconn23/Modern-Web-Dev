@@ -35,12 +35,13 @@ export async function liveQuery(
   }
 }
 
-export const updateGame = async (id, board, turn) => {
+export const updateGame = async (id, board, turn, winner) => {
   const query = new Parse.Query("Matches");
   try {
     const match = await query.get(id);
     match.set("board", board);
     match.set("turn", turn);
+    match.set("winner", winner);
     await match.save();
     console.log("Success! match updated!");
   } catch (error) {
