@@ -104,7 +104,7 @@ const Dashboard = () => {
         />
       )}
       <div>
-        <h2 className="text-2xl font-bold">Your Games</h2>
+        <h2 className="text-2xl font-bold">Your Games:</h2>
         <div className="grid grid-cols-4">
           {matches?.map((match) => {
             return (
