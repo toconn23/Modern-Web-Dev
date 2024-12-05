@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { loginUser } from "./AuthService";
 import AuthLoginForm from "./AuthLoginForm";
+import Header from "../Common/Header";
 import { useNavigate } from "react-router-dom";
 
 const AuthLogin = () => {
@@ -43,6 +44,7 @@ const AuthLogin = () => {
 
   return (
     <div>
+      <Header />
       <AuthLoginForm
         user={user}
         onChange={onChangeHandler}
