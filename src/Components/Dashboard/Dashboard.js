@@ -2,6 +2,7 @@ import Parse from "parse";
 import React, { useEffect, useState } from "react";
 import Header from "../Common/Header.js";
 import { Link } from "react-router-dom";
+import Board from "../Game/Board.js";
 import {
   getMatches,
   createMatch,
@@ -88,22 +89,21 @@ const Dashboard = () => {
       <div>
         <h2 className="text-2xl font-bold">Your Games</h2>
         <ul>
-          {matches.map((match) => (
-            <li key={match.id}>
-              <Link to={`/game/${match.id}`}>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-5 aspect-square">
-                  {match.get("red").get("username")} vs{" "}
-                  {match.get("black").get(
-                    "username" ??
-                      match
-                        .get("black")
-                        .fetch()
-                        .then((b) => b.get("username"))
-                  )}
-                </button>
-              </Link>
-            </li>
-          ))}
+          {matches.map((match) => {
+            return (
+              <li key={match.id}>
+                <Link to={`/game/${match.id}`}>
+                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-5 flex items-center justify-center flex-col">
+                    {match.get("red").get("username")} vs{" "}
+                    {match.get("black").get("username")}
+                    <div className="justify-center items-center">
+                      <Board id={match.id} minimized={true} />
+                    </div>
+                  </button>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>

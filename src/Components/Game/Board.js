@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Parse from "parse";
 import { useNavigate } from "react-router-dom";
 import { handleSquareClick, initBoard, checkWin } from "./GameLogicService";
 import { updateGame, liveQuery, getGame } from "./GameStateService";
 
-const Board = ({ id }) => {
+const Board = ({ id, minimized = false }) => {
   const [board, setBoard] = useState(initBoard());
   const [turn, setTurn] = useState("r");
   const [selectedPiece, setSelectedPiece] = useState(null);
@@ -108,9 +108,17 @@ const Board = ({ id }) => {
           Black Wins!
         </div>
       )}
-      {/* make grid of buttons for board */}
-      <div className="flex justify-center items-center h-screen">
-        <div className="absolute top-[155px] grid grid-cols-8 w-10/12 sm:w-10/12 md:w-9/12 lg:w-5/12 ">
+      {/* make grid of buttons for board. Add minimize option for dashboard preview to render*/}
+      <div
+        className={`flex justify-center items-center ${
+          minimized ? "w-60" : "h-screen"
+        }`}
+      >
+        <div
+          className={`grid grid-cols-8 ${
+            minimized ? "w-full" : "w-10/12 sm:w-10/12 md:w-9/12 lg:w-5/12"
+          } `}
+        >
           {/* reverse the board if player is black */}
           {(player === "b"
             ? board.map((row) => [...row].reverse()).reverse()
