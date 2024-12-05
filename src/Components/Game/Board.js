@@ -91,6 +91,7 @@ const Board = ({ id, minimized = false }) => {
       }
       updateGame(id, board, turn, winner);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turn]);
 
   if (loading) return null;
@@ -116,7 +117,9 @@ const Board = ({ id, minimized = false }) => {
       >
         <div
           className={`grid grid-cols-8 ${
-            minimized ? "w-full" : "w-10/12 sm:w-10/12 md:w-9/12 lg:w-5/12"
+            minimized
+              ? "w-full"
+              : "absolute top-[155px] w-10/12 sm:w-10/12 md:w-9/12 lg:w-5/12"
           } `}
         >
           {/* reverse the board if player is black */}

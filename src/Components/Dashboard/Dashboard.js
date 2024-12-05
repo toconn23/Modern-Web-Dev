@@ -1,6 +1,7 @@
 import Parse from "parse";
 import React, { useEffect, useState } from "react";
 import Header from "../Common/Header.js";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Board from "../Game/Board.js";
 import {
@@ -17,25 +18,27 @@ const Dashboard = () => {
   const [matches, setMatches] = useState([]);
   const [red, setRed] = useState([]);
   const [black, setBlack] = useState([]);
+  const nav = useNavigate();
 
   useEffect(() => {
     getMatches(Parse.User.current()?.get("username")).then((matches) => {
       setMatches(matches);
       // need to fetch the username from the red and black pointers to display
-      matches.forEach((match) => {
+      matches?.forEach((match) => {
         match
           .get("black")
           .fetch()
           .then((b) => setBlack(...black, b.get("username")));
       });
-      matches.forEach((match) => {
+      matches?.forEach((match) => {
         match
           .get("red")
           .fetch()
           .then((r) => setRed(...red, r.get("username")));
       });
     });
-  }, [red, black]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleButtonClick = () => {
     setShowForm(true);
@@ -88,19 +91,22 @@ const Dashboard = () => {
       )}
       <div>
         <h2 className="text-2xl font-bold">Your Games</h2>
-        <ul>
-          {matches.map((match) => {
+        <ul className="flex space-x-4">
+          {matches?.map((match) => {
             return (
               <li key={match.id}>
-                <Link to={`/game/${match.id}`}>
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-5 flex items-center justify-center flex-col">
-                    {match.get("red").get("username")} vs{" "}
-                    {match.get("black").get("username")}
-                    <div className="justify-center items-center">
-                      <Board id={match.id} minimized={true} />
-                    </div>
-                  </button>
-                </Link>
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-5 flex items-center justify-center flex-col "
+                  onClick={() => {
+                    nav(`/game/${match.id}`);
+                  }}
+                >
+                  {match.get("red").get("username")} vs{" "}
+                  {match.get("black").get("username")}
+                  <div className="justify-center items-center">
+                    <Board id={match.id} minimized={true} />
+                  </div>
+                </button>
               </li>
             );
           })}
