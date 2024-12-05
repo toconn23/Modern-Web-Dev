@@ -9,7 +9,7 @@ const Board = ({ id }) => {
   const [validMoves, setValidMoves] = useState([]);
   const [movePaths, setMovePaths] = useState([]);
   const [winner, setWinner] = useState(null);
-  //const [player, setPlayer] = useState();
+  const [player, setPlayer] = useState("r");
   //check if the component is rendered for the first time to avoid updating the board to initial state
   const [isInitialRender, setIsInitialRender] = useState(true);
   //avoid render of initial board
@@ -71,48 +71,63 @@ const Board = ({ id }) => {
       {/* make grid of buttons for board */}
       <div className="flex justify-center items-center h-screen ">
         <div className="grid grid-cols-8 w-5/12">
-          {board.map((row, i) =>
-            row.map((cell, j) => (
-              <button
-                onClick={() => handleClick(i, j)}
-                key={`${i}-${j}`}
-                className={`aspect-square flex items-center justify-center  
-                ${(i + j) % 2 === 0 ? "bg-[#b58863]" : "bg-[#f0d9b5]"}
+          {/* reverse the board if player is black */}
+          {(player === "b"
+            ? board.map((row) => [...row].reverse()).reverse()
+            : board
+          ).map((row, i) =>
+            row.map((cell, j) => {
+              let actualI = player === "b" ? 7 - i : i;
+              let actualJ = player === "b" ? 7 - j : j;
+              return (
+                <button
+                  onClick={() => handleClick(actualI, actualJ)}
+                  key={`${i}-${j}`}
+                  className={`aspect-square flex items-center justify-center  
                 ${
-                  selectedPiece?.row === i && selectedPiece?.col === j
+                  (actualI + actualJ) % 2 === 0
+                    ? "bg-[#b58863]"
+                    : "bg-[#f0d9b5]"
+                }
+                ${
+                  selectedPiece?.row === actualI &&
+                  selectedPiece?.col === actualJ
                     ? "border-4 border-yellow-500"
                     : ""
                 }  // Highlight selected square}`}
-              >
-                {cell === "b" && (
-                  <div className="aspect-square w-8/12  bg-black rounded-full"></div>
-                )}
-                {cell === "r" && (
-                  <div className="aspect-square w-8/12 bg-red-500 rounded-full"></div>
-                )}
-                {cell === "R" && (
-                  <div className="aspect-square w-8/12 bg-red-500 rounded-full flex items-center justify-center">
-                    <img
-                      src="/images/king.png"
-                      alt="king"
-                      className="w-3/4 object-contain"
-                    />
-                  </div>
-                )}
-                {cell === "B" && (
-                  <div className="aspect-square w-8/12 bg-black rounded-full flex items-center justify-center">
-                    <img
-                      src="/images/king.png"
-                      alt="king"
-                      className="w-3/4 object-contain"
-                    />
-                  </div>
-                )}
-                {validMoves.some((move) => move[0] === i && move[1] === j) && (
-                  <div className="aspect-square w-4/12 bg-green-500 rounded-full"></div>
-                )}
-              </button>
-            ))
+                >
+                  {cell === "b" && (
+                    <div className="aspect-square w-8/12  bg-black rounded-full"></div>
+                  )}
+                  {cell === "r" && (
+                    <div className="aspect-square w-8/12 bg-red-500 rounded-full"></div>
+                  )}
+                  {cell === "R" && (
+                    <div className="aspect-square w-8/12 bg-red-500 rounded-full flex items-center justify-center">
+                      <img
+                        src="/images/king.png"
+                        alt="king"
+                        className="w-3/4 object-contain"
+                      />
+                    </div>
+                  )}
+                  {cell === "B" && (
+                    <div className="aspect-square w-8/12 bg-black rounded-full flex items-center justify-center">
+                      <img
+                        src="/images/king.png"
+                        alt="king"
+                        className="w-3/4 object-contain"
+                      />
+                    </div>
+                  )}
+                  {validMoves.some(
+                    (move) => move[0] === actualI && move[1] === actualJ
+                  ) && (
+                    <div className="aspect-square w-4/12 bg-green-500 rounded-full"></div>
+                  )}
+                </button>
+              );
+            })
           )}
         </div>
       </div>
