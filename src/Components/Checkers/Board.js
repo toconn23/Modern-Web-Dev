@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { handleSquareClick, initBoard, checkWin } from "./GameLogicService";
 import { updateGame, liveQuery, getGame } from "./GameStateService";
 
@@ -14,6 +15,7 @@ const Board = ({ id }) => {
   const [isInitialRender, setIsInitialRender] = useState(true);
   //avoid render of initial board
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const handleClick = (i, j) => {
     handleSquareClick(
@@ -35,11 +37,16 @@ const Board = ({ id }) => {
   liveQuery(setBoard, setTurn, setSelectedPiece, setValidMoves);
   useEffect(() => {
     getGame(id).then((match) => {
+      if (!match || match.length === 0) {
+        alert("Match not found!");
+        navigate(-1);
+        return;
+      }
       setBoard(match.get("board"));
       setTurn(match.get("turn"));
       setLoading(false);
     });
-  }, []);
+  }, [id, navigate]);
   useEffect(() => {
     if (isInitialRender || loading) {
       setIsInitialRender(false);
