@@ -24,6 +24,23 @@ export const createMatch = async (black, red) => {
   }
 };
 
+export const getMatches = async (username) => {
+  const userQuery = new Parse.Query("Leaderboard");
+  userQuery.equalTo("username", username);
+  try {
+    const user = await userQuery.first();
+    const blackQuery = new Parse.Query("Matches");
+    const blackCondition = blackQuery.equalTo("black", user);
+    const redQuery = new Parse.Query("Matches");
+    const redCondition = redQuery.equalTo("red", user);
+    const query = Parse.Query.or(blackCondition, redCondition);
+    const matches = await query.find();
+    return matches;
+  } catch (err) {
+    console.log("Error: ", err);
+  }
+};
+
 export const getUserByUsername = async (username) => {
   const query = new Parse.Query("Leaderboard");
   try {
