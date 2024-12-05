@@ -105,7 +105,7 @@ const Dashboard = () => {
       )}
       <div>
         <h2 className="text-2xl font-bold">Your Games:</h2>
-        <div className="grid grid-cols-4">
+        <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
           {matches?.map((match) => {
             return (
               <div key={match.id} className="flex flex-col items-center">
