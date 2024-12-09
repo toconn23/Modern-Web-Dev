@@ -3,6 +3,7 @@ import { loginUser } from "./AuthService";
 import AuthLoginForm from "./AuthLoginForm";
 import Header from "../Common/Header";
 import { useNavigate } from "react-router-dom";
+import { checkUser } from "./AuthService";
 
 const AuthLogin = () => {
   const nav = useNavigate();
@@ -18,10 +19,13 @@ const AuthLogin = () => {
 
   //check if user is authenticated
   useEffect(() => {
+    if (checkUser()) {
+      nav("/");
+    }
     if (user && add) {
       loginUser(user).then((userLoggedIn) => {
         if (userLoggedIn) {
-          nav("/Main");
+          nav("/");
         }
         setAdd(false);
       });
@@ -30,9 +34,7 @@ const AuthLogin = () => {
 
   const onChangeHandler = (e) => {
     e.preventDefault();
-    console.log(e.target);
     const { name, value: newValue } = e.target;
-    console.log(newValue);
     setUser({ ...user, [name]: newValue });
   };
 
