@@ -44,8 +44,11 @@ const Board = ({ id, minimized = false }) => {
 
   // run the liveQuery to update the board for both players
   useEffect(() => {
+    if (minimized) {
+      return;
+    }
     liveQuery(setBoard, setTurn, setSelectedPiece, setValidMoves);
-  }, [setBoard, setTurn, setSelectedPiece, setValidMoves]);
+  }, [setBoard, setTurn, setSelectedPiece, setValidMoves, minimized]);
 
   useEffect(() => {
     if (!loading) return;
@@ -95,7 +98,9 @@ const Board = ({ id, minimized = false }) => {
         if (turn === "r") setWinner("b");
         else setWinner("r");
       }
-      updateGame(id, board, turn, winner);
+      if (!minimized) {
+        updateGame(id, board, turn, winner);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turn]);
