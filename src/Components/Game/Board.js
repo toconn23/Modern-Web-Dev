@@ -54,6 +54,7 @@ const Board = ({ id, minimized = false }) => {
     if (!loading) return;
     //retrieve the game from the database
     getGame(id).then((match) => {
+      console.log(match);
       if (!match || match.length === 0) {
         alert("Match not found!");
         navigate(-1);
@@ -80,6 +81,9 @@ const Board = ({ id, minimized = false }) => {
           // Update state only if everything is successful
           setBoard(match.get("board"));
           setTurn(match.get("turn"));
+          setWinner(match.get("winner"));
+          console.log(winner);
+          console.log("turn", turn);
           setLoading(false);
         })
         .catch((error) => {
@@ -94,16 +98,17 @@ const Board = ({ id, minimized = false }) => {
       setIsInitialRender(false);
       return;
     } else {
-      if (checkWin(board, turn)) {
+      if (minimized) {
+        return;
+      }
+      if (!winner && checkWin(board, turn)) {
         if (turn === "r") setWinner("b");
         else setWinner("r");
       }
-      if (!minimized) {
-        updateGame(id, board, turn, winner);
-      }
+      updateGame(id, board, turn, winner);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [turn]);
+  }, [turn, winner]);
 
   if (loading) return null;
 
