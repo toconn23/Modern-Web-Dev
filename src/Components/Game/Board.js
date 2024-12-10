@@ -41,8 +41,12 @@ const Board = ({ id, minimized = false }) => {
       setMovePaths
     );
   };
+
   // run the liveQuery to update the board for both players
-  liveQuery(setBoard, setTurn, setSelectedPiece, setValidMoves);
+  useEffect(() => {
+    liveQuery(setBoard, setTurn, setSelectedPiece, setValidMoves);
+  }, [setBoard, setTurn, setSelectedPiece, setValidMoves]);
+
   useEffect(() => {
     if (!loading) return;
     //retrieve the game from the database

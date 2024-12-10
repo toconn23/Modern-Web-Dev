@@ -15,6 +15,8 @@ const Dashboard = () => {
   const [email, setEmail] = useState("");
   const [selectedColor, setSelectedColor] = useState("r");
   const [matches, setMatches] = useState([]);
+  //throwaway state var to load in user names
+  // eslint-disable-next-line no-unused-vars
   const [users, setUsers] = useState([]);
   const nav = useNavigate();
 
@@ -30,13 +32,13 @@ const Dashboard = () => {
           match
             .get("black")
             .fetch()
-            .then((b) => setUsers(...users, b.get("username")));
+            .then((b) => setUsers((u) => [...u, b.get("username")]));
         });
         matches?.forEach((match) => {
           match
             .get("red")
             .fetch()
-            .then((r) => setUsers(...users, r.get("username")));
+            .then((r) => setUsers((u) => [...u, r.get("username")]));
         });
       } catch (error) {
         console.error("Error fetching matches:", error);
@@ -44,7 +46,6 @@ const Dashboard = () => {
     };
 
     fetchMatches();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleButtonClick = () => {
