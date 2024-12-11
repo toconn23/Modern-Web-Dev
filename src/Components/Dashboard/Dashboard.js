@@ -28,15 +28,25 @@ const Dashboard = () => {
         const matches = await getMatches(username);
         setMatches(matches);
         //For some reason, username of opponent will return null unless i do this chicanery
+        //fetch match opponents
         matches?.forEach((match) => {
           match
             .get("black")
+            .fetch()
+            .then((b) => {
+              if (b?.get("username") === Parse.User.current()?.get("username"))
+                return;
+            })
             .fetch()
             .then((b) => setUsers((u) => [...u, b.get("username")]));
         });
         matches?.forEach((match) => {
           match
             .get("red")
+            .then((r) => {
+              if (r?.get("username") === Parse.User.current()?.get("username"))
+                return;
+            })
             .fetch()
             .then((r) => setUsers((u) => [...u, r.get("username")]));
         });
