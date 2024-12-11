@@ -15,6 +15,7 @@ export const createMatch = async (black, red) => {
     ["r", "-", "r", "-", "r", "-", "r", "-"],
     ["-", "r", "-", "r", "-", "r", "-", "r"],
   ]);
+  match.set("move", 0);
 
   try {
     const result = await match.save();
