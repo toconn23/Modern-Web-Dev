@@ -7,6 +7,7 @@ import Game from "./Game/Game";
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Dashboard from "./Dashboard/Dashboard";
+import Leaderboard from "./Leaderboard/Leaderboard";
 
 export default function Components() {
   return (
@@ -24,6 +25,7 @@ export default function Components() {
           path="/Dashboard"
           element={<ProtectedRoute path="/" element={Dashboard} />}
         />
+        <Route path="/Leaderboard" element={<ProtectedRoute path="/" element={Leaderboard}/>} />
         <Route path="/Game/:id" element={<Game />} />
       </Routes>
     </Router>

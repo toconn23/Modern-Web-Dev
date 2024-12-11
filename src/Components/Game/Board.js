@@ -77,6 +77,7 @@ const Board = ({ id, minimized = false }) => {
           // Update state only if everything is successful
           setBoard(match.get("board"));
           setTurn(match.get("turn"));
+          setWinner(match.get("winner"))
           setLoading(false);
         })
         .catch((error) => {
@@ -98,7 +99,7 @@ const Board = ({ id, minimized = false }) => {
       updateGame(id, board, turn, winner);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [turn]);
+  }, [turn,winner]);
 
   if (loading) return null;
 
