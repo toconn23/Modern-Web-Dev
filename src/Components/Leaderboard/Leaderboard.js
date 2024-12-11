@@ -1,31 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Parse from "parse"; // Assuming Parse is already configured
 import Header from "../Common/Header.js";
+import {fetchLeaderboardData} from "../../Services/Leaderboard.js"
 
 const Leaderboard = () => {
     const [players, setPlayers] = useState([]);
 
     // Fetch data from the Leaderboard table
     useEffect(() => {
-        const fetchLeaderboardData = async () => {
-            const Leaderboard = Parse.Object.extend("Leaderboard");
-            const query = new Parse.Query(Leaderboard);
-            query.descending("wins"); // Sort by wins in descending order
-
-            try {
-                const results = await query.find();
-                const leaderboardData = results.map((player) => ({
-                    username: player.get("username"),
-                    wins: player.get("wins"),
-                    losses: player.get("losses"),
-                }));
-                setPlayers(leaderboardData);
-            } catch (error) {
-                console.error("Error while fetching leaderboard data:", error);
-            }
-        };
-
-        fetchLeaderboardData();
+        fetchLeaderboardData(setPlayers);
     }, []);
 
     return (
