@@ -30,25 +30,17 @@ const Dashboard = () => {
         //For some reason, username of opponent will return null unless i do this chicanery
         //fetch match opponents
         matches?.forEach((match) => {
-          match
-            .get("black")
-            .fetch()
-            .then((b) => {
-              if (b?.get("username") === Parse.User.current()?.get("username"))
-                return;
-            })
-            .fetch()
-            .then((b) => setUsers((u) => [...u, b.get("username")]));
-        });
-        matches?.forEach((match) => {
-          match
-            .get("red")
-            .then((r) => {
-              if (r?.get("username") === Parse.User.current()?.get("username"))
-                return;
-            })
-            .fetch()
-            .then((r) => setUsers((u) => [...u, r.get("username")]));
+          let b = match.get("black");
+          let r = match.get("red");
+          console.log("red: ", r?.get("username"));
+          console.log("black: ", b?.get("username"));
+          if (b?.get("username")) {
+            r.fetch().then((b) => setUsers((u) => [...u, b.get("username")]));
+          } else if (r.get("username")) {
+            b.fetch().then((r) => setUsers((u) => [...u, r.get("username")]));
+          } else {
+            return;
+          }
         });
       } catch (error) {
         console.error("Error fetching matches:", error);
