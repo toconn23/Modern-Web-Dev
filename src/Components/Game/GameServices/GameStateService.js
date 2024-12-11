@@ -5,7 +5,9 @@ export async function liveQuery(
   setBoard,
   setTurn,
   setSelectedPiece,
-  setValidMoves
+  setValidMoves,
+  setCurrMove,
+  setViewedMove,
 ) {
   var client = new Parse.LiveQueryClient({
     applicationId: ENV.APPLICATION_ID,
@@ -22,6 +24,8 @@ export async function liveQuery(
     subscription.on("update", (object) => {
       setBoard(object.get("board"));
       setTurn(object.get("turn"));
+      setCurrMove(object.get("move"));
+      setViewedMove(object.get("move"));
       //reset the selected piece and valid moves to prevent moving twice
       setSelectedPiece(null);
       setValidMoves([]);
@@ -35,13 +39,14 @@ export async function liveQuery(
   }
 }
 
-export const updateGame = async (id, board, turn, winner) => {
+export const updateGame = async (id, board, turn, winner, move) => {
   const query = new Parse.Query("Matches");
   try {
     const match = await query.get(id);
     match.set("board", board);
     match.set("turn", turn);
     match.set("winner", winner);
+    match.set("move", move);
     await match.save();
     console.log("Success! match updated!");
   } catch (error) {

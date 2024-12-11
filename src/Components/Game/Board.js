@@ -12,6 +12,7 @@ import {
   getGame,
 } from "./GameServices/GameStateService";
 import { updateLeaderboard } from "../../Services/Leaderboard";
+import{getMove, createMove} from "../../Services/Move";
 
 const Board = ({ id, minimized = false }) => {
   const [board, setBoard] = useState(initBoard());
@@ -25,6 +26,8 @@ const Board = ({ id, minimized = false }) => {
   const [loading, setLoading] = useState(true);
   const [isUpdated, setIsUpdated] = useState(false);
   const [opponent, setOpponent] = useState(null);
+  const [viewedMove, setViewedMove] = useState(0); // setting intial viewed move
+  const [currMove, setCurrMove] = useState(0); // setting initial current move to start position
   const navigate = useNavigate();
 
   const handleClick = (i, j) => {
@@ -50,8 +53,8 @@ const Board = ({ id, minimized = false }) => {
     if (minimized) {
       return;
     }
-    liveQuery(setBoard, setTurn, setSelectedPiece, setValidMoves);
-  }, [setBoard, setTurn, setSelectedPiece, setValidMoves, minimized]);
+    liveQuery(setBoard, setTurn, setSelectedPiece, setValidMoves, setCurrMove, setViewedMove);
+  }, [setBoard, setTurn, setSelectedPiece, setValidMoves, minimized, setCurrMove, setViewedMove]);
 
   useEffect(() => {
     // only retrive if first time loading page
@@ -86,6 +89,8 @@ const Board = ({ id, minimized = false }) => {
           }
           // Update state only if everything is successful
           setBoard(match.get("board"));
+          setCurrMove(match.get("move"));
+          setViewedMove(match.get("move"));
           setTurn(match.get("turn"));
           setWinner(match.get("winner"));
           setLoading(false);
@@ -122,10 +127,11 @@ const Board = ({ id, minimized = false }) => {
     }
     //only update game in databse if the board is updated
     if (isUpdated) {
-      updateGame(id, board, turn, win);
+      updateGame(id, board, turn, win, currMove + 1);
+      createMove(id, currMove + 1, board);
       setIsUpdated(false);
     }
-  }, [turn, winner, board, id, isUpdated, minimized, player, opponent]);
+  }, [turn, winner, board, id, isUpdated, minimized, player, opponent, currMove]);
 
   if (loading) return null;
 
@@ -148,6 +154,49 @@ const Board = ({ id, minimized = false }) => {
           }`}
         >
           Black Wins!
+        </div>
+      )}
+            {winner === "b" && (
+        <div
+          className={`text-center  font-extrabold text-black ${
+            minimized ? "text-1xl" : "text-6xl"
+          }`}
+        >
+          Black Wins!
+        </div>
+      )}
+      {!minimized && (
+        <div className="flex justify-center items-center space-x-8">
+          <button
+            onClick={async () => {
+              //check if can go back
+              if (viewedMove === 0) {
+                return;
+              } else if (viewedMove === 1) {//initial board is always the same
+                setBoard(initBoard());
+                setViewedMove(0);
+                return;
+              }
+              setBoard(await getMove(id, viewedMove - 1));
+              setViewedMove(viewedMove - 1);
+            }}
+            className="text-5xl font-extrabold"
+          >
+            &#8592; {/* Left arrow */}
+          </button>
+          <button
+            onClick={async () => {
+              //check if can go forward
+              if (viewedMove === currMove) {
+                return;
+              }
+              setBoard(await getMove(id, viewedMove + 1));
+              setViewedMove(viewedMove + 1);
+            }}
+            className="text-5xl font-extrabold"
+          >
+            &#8594; {/* Right arrow */}
+          </button>
         </div>
       )}
       {/* make grid of buttons for board. Add minimize option for dashboard preview to render*/}

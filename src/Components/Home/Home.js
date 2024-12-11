@@ -29,6 +29,18 @@ const HomePage = () => {
           <p className="text-lg text-gray-600 mt-2">
             Explore our Checkers game and climb to the top of the leaderboard!
           </p>
+          <div className="flex justify-center space-x-4 py-8">
+          <Link to="/Dashboard">
+            <button className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600">
+              Dashboard
+            </button>
+          </Link>
+          <Link to="/Leaderboard">
+            <button className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600">
+              Leaderboard
+            </button>
+          </Link>
+        </div>
         </section>
 
         {/* Checkers Rules Section */}
@@ -100,18 +112,7 @@ const HomePage = () => {
         </section>
 
         {/* Dashboard Link */}
-        <div className="flex justify-center space-x-4 py-8">
-          <Link to="/Dashboard">
-            <button className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600">
-              Dashboard
-            </button>
-          </Link>
-          <Link to="/Leaderboard">
-            <button className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600">
-              Leaderboard
-            </button>
-          </Link>
-        </div>
+       
       </div>
     </div>
   );
