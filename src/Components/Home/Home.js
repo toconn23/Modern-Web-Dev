@@ -13,15 +13,11 @@ const HomePage = () => {
         }}
       >
         <h2>Welcome to the Notre Dame Football Stats Page</h2>
-        <p>
-          Explore stats, player information, game results, and more for Notre
-          Dame football. Stay updated with the latest stats and insights on your
-          favorite team!
-        </p>
+        <p>actually checkers now</p>
         {/* <ProtectedRoute element={Main} /> */}
       </section>
-      <Link to="/Main">
-        <button>Go to Main</button>
+      <Link to="/Dashboard">
+        <button>Dashboard</button>
       </Link>
     </div>
   );

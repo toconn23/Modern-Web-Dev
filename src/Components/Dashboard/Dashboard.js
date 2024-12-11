@@ -62,7 +62,7 @@ const Dashboard = () => {
     let red = null;
     //check if idiot is trying to play against themselves
     if (email === Parse.User.current()?.get("username")) {
-      alert("You cannot play against yourself dumbass");
+      alert("You cannot play against yourself bozo");
       return;
     }
     if (selectedColor === "r") {
