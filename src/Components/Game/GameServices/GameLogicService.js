@@ -132,7 +132,8 @@ export const handleSquareClick = (
   turn,
   setTurn,
   movePaths,
-  setMovePaths
+  setMovePaths,
+  setIsUpdated
 ) => {
   const newBoard = [...board];
   if (
@@ -179,6 +180,7 @@ export const handleSquareClick = (
     setSelectedPiece(null);
     setValidMoves([]);
     setMovePaths([]);
+    setIsUpdated(true);
   } else if (board[i][j]?.toLowerCase() === turn) {
     setSelectedPiece({ row: i, col: j });
     let moves = getValidMoves(board, i, j);

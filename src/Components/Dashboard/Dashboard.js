@@ -34,7 +34,7 @@ const Dashboard = () => {
             .get("black")
             .fetch()
             .then((b) => {
-              if (b.get("username") === Parse.User.current()?.get("username"))
+              if (b?.get("username") === Parse.User.current()?.get("username"))
                 return;
             })
             .fetch()
@@ -44,7 +44,7 @@ const Dashboard = () => {
           match
             .get("red")
             .then((r) => {
-              if (r.get("username") === Parse.User.current()?.get("username"))
+              if (r?.get("username") === Parse.User.current()?.get("username"))
                 return;
             })
             .fetch()

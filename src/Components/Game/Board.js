@@ -11,6 +11,7 @@ import {
   liveQuery,
   getGame,
 } from "./GameServices/GameStateService";
+import { updateLeaderboard } from "../../Services/Leaderboard";
 
 const Board = ({ id, minimized = false }) => {
   const [board, setBoard] = useState(initBoard());
@@ -20,9 +21,10 @@ const Board = ({ id, minimized = false }) => {
   const [movePaths, setMovePaths] = useState([]);
   const [winner, setWinner] = useState(null);
   const [player, setPlayer] = useState(Parse.User.current() ? "r" : "b");
-  const [isInitialRender, setIsInitialRender] = useState(true);
   //check if the component is rendered for the first time to avoid updating the board to initial state
   const [loading, setLoading] = useState(true);
+  const [isUpdated, setIsUpdated] = useState(false);
+  const [opponent, setOpponent] = useState(null);
   const navigate = useNavigate();
 
   const handleClick = (i, j) => {
@@ -38,7 +40,8 @@ const Board = ({ id, minimized = false }) => {
       turn,
       setTurn,
       movePaths,
-      setMovePaths
+      setMovePaths,
+      setIsUpdated
     );
   };
 
@@ -51,6 +54,7 @@ const Board = ({ id, minimized = false }) => {
   }, [setBoard, setTurn, setSelectedPiece, setValidMoves, minimized]);
 
   useEffect(() => {
+    // only retrive if first time loading page
     if (!loading) return;
     //retrieve the game from the database
     getGame(id).then((match) => {
@@ -68,10 +72,12 @@ const Board = ({ id, minimized = false }) => {
           if (
             blackUser.get("username") === Parse.User.current()?.get("username")
           ) {
+            setOpponent(redUser.get("username"));
             setPlayer("b");
           } else if (
             redUser.get("username") === Parse.User.current()?.get("username")
           ) {
+            setOpponent(blackUser.get("username"));
             setPlayer("r");
           } else {
             alert("You are not a player in this match!");
@@ -82,8 +88,6 @@ const Board = ({ id, minimized = false }) => {
           setBoard(match.get("board"));
           setTurn(match.get("turn"));
           setWinner(match.get("winner"));
-          console.log(winner);
-          console.log("turn", turn);
           setLoading(false);
         })
         .catch((error) => {
@@ -92,23 +96,36 @@ const Board = ({ id, minimized = false }) => {
           navigate(-1);
         });
     });
-  }, [player, id, navigate, loading]);
+  }, [player, id, navigate, loading, winner, turn]);
   useEffect(() => {
-    if (isInitialRender || loading) {
-      setIsInitialRender(false);
+    if (minimized) {
       return;
-    } else {
-      if (minimized) {
-        return;
-      }
-      if (!winner && checkWin(board, turn)) {
-        if (turn === "r") setWinner("b");
-        else setWinner("r");
-      }
-      updateGame(id, board, turn, winner);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [turn, winner]);
+    //check if game has just been won to update leaderboard
+    let win = null;
+    if (!winner && checkWin(board, turn)) {
+      if (turn === "r") {
+        setWinner("b");
+        win = "b";
+      } else {
+        win = "r";
+        setWinner("r");
+      }
+      //update leaderboard
+      if (isUpdated) {
+        if (win === player) {
+          updateLeaderboard(opponent, Parse.User.current()?.get("username"));
+        } else {
+          updateLeaderboard(Parse.User.current()?.get("username"), opponent);
+        }
+      }
+    }
+    //only update game in databse if the board is updated
+    if (isUpdated) {
+      updateGame(id, board, turn, win);
+      setIsUpdated(false);
+    }
+  }, [turn, winner, board, id, isUpdated, minimized, player, opponent]);
 
   if (loading) return null;
 
@@ -116,12 +133,20 @@ const Board = ({ id, minimized = false }) => {
   return (
     <>
       {winner === "r" && (
-        <div className="text-center text-6xl font-extrabold text-red-500">
+        <div
+          className={`text-center  font-extrabold text-red-500 ${
+            minimized ? "text-1xl" : "text-6xl"
+          }`}
+        >
           Red Wins!
         </div>
       )}
       {winner === "b" && (
-        <div className="text-center text-6xl font-extrabold text-black">
+        <div
+          className={`text-center  font-extrabold text-black ${
+            minimized ? "text-1xl" : "text-6xl"
+          }`}
+        >
           Black Wins!
         </div>
       )}
