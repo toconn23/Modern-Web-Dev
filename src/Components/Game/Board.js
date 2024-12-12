@@ -156,15 +156,6 @@ const Board = ({ id, minimized = false }) => {
           Black Wins!
         </div>
       )}
-            {winner === "b" && (
-        <div
-          className={`text-center  font-extrabold text-black ${
-            minimized ? "text-1xl" : "text-6xl"
-          }`}
-        >
-          Black Wins!
-        </div>
-      )}
       {!minimized && (
         <div className="flex justify-center items-center space-x-8">
           <button
