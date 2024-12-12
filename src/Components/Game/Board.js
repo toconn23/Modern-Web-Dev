@@ -141,7 +141,7 @@ const Board = ({ id, minimized = false }) => {
       {winner === "r" && (
         <div
           className={`text-center  font-extrabold text-red-500 ${
-            minimized ? "text-1xl" : "text-6xl"
+            minimized ? "text-1xl" : "text-5xl"
           }`}
         >
           Red Wins!
@@ -150,7 +150,7 @@ const Board = ({ id, minimized = false }) => {
       {winner === "b" && (
         <div
           className={`text-center  font-extrabold text-black ${
-            minimized ? "text-1xl" : "text-6xl"
+            minimized ? "text-1xl" : "text-5xl"
           }`}
         >
           Black Wins!
@@ -224,7 +224,7 @@ const Board = ({ id, minimized = false }) => {
               return (
                 <button
                   onClick={() => {
-                    if (turn === player) {
+                    if (turn === player && viewedMove === currMove) {
                       handleClick(actualI, actualJ);
                     }
                   }}
