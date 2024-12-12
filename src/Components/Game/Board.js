@@ -53,8 +53,8 @@ const Board = ({ id, minimized = false }) => {
     if (minimized) {
       return;
     }
-    liveQuery(setBoard, setTurn, setSelectedPiece, setValidMoves, setCurrMove, setViewedMove);
-  }, [setBoard, setTurn, setSelectedPiece, setValidMoves, minimized, setCurrMove, setViewedMove]);
+    liveQuery(setBoard, setTurn, setSelectedPiece, setValidMoves, setCurrMove, setViewedMove, id);
+  }, [setBoard, setTurn, setSelectedPiece, setValidMoves, minimized, setCurrMove, setViewedMove, id]);
 
   useEffect(() => {
     // only retrive if first time loading page

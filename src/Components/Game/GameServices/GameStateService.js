@@ -8,6 +8,7 @@ export async function liveQuery(
   setValidMoves,
   setCurrMove,
   setViewedMove,
+  id,
 ) {
   var client = new Parse.LiveQueryClient({
     applicationId: ENV.APPLICATION_ID,
@@ -15,7 +16,7 @@ export async function liveQuery(
     javascriptKey: ENV.JAVASCRIPT_KEY,
   });
   client.open();
-  var query = new Parse.Query("Matches");
+  var query = new Parse.Query("Matches").equalTo("objectId", id);
   try {
     var subscription = await client.subscribe(query);
     // subscription.on("open", () => {
