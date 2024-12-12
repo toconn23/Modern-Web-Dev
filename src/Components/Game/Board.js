@@ -50,8 +50,8 @@ const Board = ({ id, minimized = false }) => {
     if (minimized) {
       return;
     }
-    liveQuery(setBoard, setTurn, setSelectedPiece, setValidMoves);
-  }, [setBoard, setTurn, setSelectedPiece, setValidMoves, minimized]);
+    liveQuery(setBoard, setTurn, setSelectedPiece, setValidMoves, id);
+  }, [setBoard, setTurn, setSelectedPiece, setValidMoves, minimized, id]);
 
   useEffect(() => {
     // only retrive if first time loading page
