@@ -20,3 +20,21 @@ export const updateLeaderboard = async (loser, winner) => {
     console.log("GET Error:", err);
   }
 };
+
+export const fetchLeaderboardData = async (setPlayers) => {
+  const Leaderboard = Parse.Object.extend("Leaderboard");
+  const query = new Parse.Query(Leaderboard);
+  query.descending("wins"); // Sort by wins in descending order
+
+  try {
+      const results = await query.find();
+      const leaderboardData = results.map((player) => ({
+          username: player.get("username"),
+          wins: player.get("wins"),
+          losses: player.get("losses"),
+      }));
+      setPlayers(leaderboardData);
+  } catch (error) {
+      console.error("Error while fetching leaderboard data:", error);
+  }
+};
