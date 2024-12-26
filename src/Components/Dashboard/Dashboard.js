@@ -32,8 +32,6 @@ const Dashboard = () => {
         matches?.forEach((match) => {
           let b = match.get("black");
           let r = match.get("red");
-          console.log("red: ", r?.get("username"));
-          console.log("black: ", b?.get("username"));
           if (b?.get("username")) {
             r.fetch().then((b) => setUsers((u) => [...u, b.get("username")]));
           } else if (r.get("username")) {
